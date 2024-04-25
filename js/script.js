@@ -49,10 +49,43 @@ function create() {
   // setScale は比率、縮尺比
   // refreshBody は Body の位置とサイズを親ゲームオブジェクトと同期する
   platforms.create(400, 568, 'ground').setScale(2).refreshBody()
-
   platforms.create(600, 400, 'ground')
   platforms.create(50, 250, 'ground')
   platforms.create(750, 220, 'ground')
+
+  // 新しいスプライトゲームオブジェクトを作成し、シーンにに追加する
+  player = this.physics.add.sprite(100, 450, 'dude')
+
+  // このボディの弾む値を設定する
+  player.setBounce(0.2)
+
+  // このボディが、ワールド境界と衝突するかどうかを設定する
+  player.setCollideWorldBounds(true)
+
+  // 新しいアニメーションを作成し、アニメーション マネージャーに追加する
+  this.anims.create({
+    key: 'left',
+    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  })
+
+  this.anims.create({
+    key: 'turn',
+    frames: [{ key: 'dude', frame: 4 }],
+    frameRate: 20
+  })
+
+  this.anims.create({
+    key: 'right',
+    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+    frameRate: 10,
+    repeat: -1
+  })
+
+  // 新しい Collider オブジェクトを作成し、
+  // 2つのオブジェクト間の衝突、または重なりを自動的にチェックする
+  this.physics.add.collider(player, platforms)
 }
 
 // ゲーム進行時に呼び出される関数
