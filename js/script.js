@@ -83,10 +83,22 @@ function create() {
     repeat: -1
   })
 
+  // カーソルオブジェクトに、4つのプロパティ(上、下、左、右)が設定される
+  cursors = this.input.keyboard.createCursorKeys()
+
   // 新しい Collider オブジェクトを作成し、
   // 2つのオブジェクト間の衝突、または重なりを自動的にチェックする
   this.physics.add.collider(player, platforms)
 }
 
 // ゲーム進行時に呼び出される関数
-function update() {}
+function update() {
+  // キーが「ダウン」状態の時
+  if (cursors.right.isDown) {
+    // ボディの速度の水平成分を、設定する
+    player.setVelocityX(160)
+
+    // このスプライトで、指定されたアニメーションの再生を、開始する
+    player.anims.play('right', true)
+  }
+}
