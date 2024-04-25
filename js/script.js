@@ -86,9 +86,26 @@ function create() {
   // カーソルオブジェクトに、4つのプロパティ(上、下、左、右)が設定される
   cursors = this.input.keyboard.createCursorKeys()
 
+  // 新しいグループゲームオブジェクトを作成し、シーンに追加する
+  stars = this.physics.add.group({
+    key: 'star',
+    repeat: 11,
+    setXY: { x: 12, y: 0, stepX: 70 }
+  })
+
+  // stars に対して、反復処理を行う
+  stars.children.iterate(function (child) {
+    // このボディの垂直方向のバウンス値を設定する
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+  })
+
   // 新しい Collider オブジェクトを作成し、
   // 2つのオブジェクト間の衝突、または重なりを自動的にチェックする
   this.physics.add.collider(player, platforms)
+  this.physics.add.collider(stars, platforms)
+
+  // ゲームオブジェクトが、重なっているかどうかをテストする
+  this.physics.add.overlap(player, stars, collectStar, null, this)
 }
 
 // ゲーム進行時に呼び出される関数
@@ -115,6 +132,13 @@ function update() {
   // このボディが、他のボディまたは静的ボディと衝突しているかどうか、
   // およびどの方向に衝突しているかチェックする
   if (cursors.up.isDown && player.body.touching.down) {
+    // ボディの速度の垂直成分を、設定する
     player.setVelocityY(-330)
   }
+}
+
+// スターに触れると、スターの存在を消す
+function collectStar(player, star) {
+  // このゲームオブジェクトの本体を停止して無効にする
+  star.disableBody(true, true)
 }
