@@ -23,6 +23,13 @@ var config = {
   }
 }
 
+var player
+var stars
+var platforms
+var cursors
+var score = 0
+var scoreText
+
 var game = new Phaser.Game(config) // ゲーム全体のコントローラー
 
 // ゲーム開始前に呼び出される関数定義
@@ -99,6 +106,9 @@ function create() {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
   })
 
+  // 新しいテキストゲームオブジェクトを作成し、シーンに追加する
+  scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#000' })
+
   // 新しい Collider オブジェクトを作成し、
   // 2つのオブジェクト間の衝突、または重なりを自動的にチェックする
   this.physics.add.collider(player, platforms)
@@ -141,4 +151,8 @@ function update() {
 function collectStar(player, star) {
   // このゲームオブジェクトの本体を停止して無効にする
   star.disableBody(true, true)
+
+  score += 10
+  // 表示するテキストを設定する
+  scoreText.setText('Score: ' + score)
 }
